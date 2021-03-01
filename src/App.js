@@ -19,14 +19,18 @@ function App() {
     }
 
     useEffect(() => {
+
         async function fetchMyAPI() {
             const response = await fetch(` http://www.filltext.com/?rows=500&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}`)
             const data = await response.json();
             setData(_.orderBy(data, isSortField, isSort));
-            setLoading(false);
         }
 
         fetchMyAPI()
+            .then(() => {
+                setLoading(false);
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     },[])
 
     return (

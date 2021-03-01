@@ -1,3 +1,5 @@
+import SortIcon from "../SortIcon/SortIcon";
+
 function Table ({data, onSort, sort, sortField}) {
 
     function handleSortID() {
@@ -21,19 +23,19 @@ function Table ({data, onSort, sort, sortField}) {
             <thead>
             <tr>
                 <th onClick={handleSortID}>
-                    ID {sortField === 'id' && <small>{sort}</small>}
+                    ID {sortField === 'id' && <SortIcon sort={sort}/>}
                 </th>
                 <th onClick={handleSortFirstName}>
-                    First Name {sortField === 'firstName' && <small>{sort}</small>}
+                    First Name {sortField === 'firstName' && <SortIcon sort={sort}/>}
                 </th>
                 <th onClick={handleSortLastName}>
-                    Last Name {sortField === 'lastName' && <small>{sort}</small>}
+                    Last Name {sortField === 'lastName' && <SortIcon sort={sort}/>}
                 </th>
                 <th onClick={handleSortEmail}>
-                    E-mail {sortField === 'email' && <small>{sort}</small>}
+                    E-mail {sortField === 'email' && <SortIcon sort={sort}/>}
                 </th>
                 <th onClick={handleSortPhone}>
-                    Phone {sortField === 'phone' && <small>{sort}</small>}
+                    Phone {sortField === 'phone' && <SortIcon sort={sort}/>}
                 </th>
             </tr>
             </thead>
