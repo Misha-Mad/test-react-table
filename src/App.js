@@ -1,5 +1,5 @@
-import './App.css';
 import {useEffect} from 'react'
+import Loader from "./Loader/Loader";
 
 function App() {
 
@@ -13,8 +13,8 @@ function App() {
     })
 
   return (
-      <div className="container">
-          MyApp
+      <div className="min-vh-100 d-flex justify-content-center align-items-center">
+          <Loader/>
       </div>
   );
 }
