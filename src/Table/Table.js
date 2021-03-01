@@ -1,14 +1,40 @@
-function Table ({data}) {
+function Table ({data, onSort, sort, sortField}) {
+
+    function handleSortID() {
+        onSort('id')
+    }
+    function handleSortFirstName() {
+        onSort('firstName')
+    }
+    function handleSortLastName() {
+        onSort('lastName')
+    }
+    function handleSortEmail() {
+        onSort('email')
+    }
+    function handleSortPhone() {
+        onSort('phone')
+    }
 
     return (
         <table className="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>E-mail</th>
-                <th>Phone</th>
+                <th onClick={handleSortID}>
+                    ID {sortField === 'id' && <small>{sort}</small>}
+                </th>
+                <th onClick={handleSortFirstName}>
+                    First Name {sortField === 'firstName' && <small>{sort}</small>}
+                </th>
+                <th onClick={handleSortLastName}>
+                    Last Name {sortField === 'lastName' && <small>{sort}</small>}
+                </th>
+                <th onClick={handleSortEmail}>
+                    E-mail {sortField === 'email' && <small>{sort}</small>}
+                </th>
+                <th onClick={handleSortPhone}>
+                    Phone {sortField === 'phone' && <small>{sort}</small>}
+                </th>
             </tr>
             </thead>
             <tbody>
