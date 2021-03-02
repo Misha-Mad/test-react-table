@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {useEffect, useState} from 'react'
 import Loader from "./Loader/Loader";
 import Table from "./Table/Table";
+import Modal from "./Modal/Modal";
 
 function App() {
 
@@ -9,6 +10,7 @@ function App() {
     const [isData, setData] = useState([]);
     const [isSort, setSort] = useState('asc');
     const [isSortField, setSortField] = useState('id');
+    const [isRow, setIsRow] = useState({});
 
     function sortTableFields(sortField) {
         const sortType = isSort === 'asc' ? 'desc' : 'asc';
@@ -18,14 +20,16 @@ function App() {
         setSortField(sortField);
     }
 
-    useEffect(() => {
+    function rowSelect(row) {
+        setIsRow(row);
+    }
 
+    useEffect(() => {
         async function fetchMyAPI() {
             const response = await fetch(` http://www.filltext.com/?rows=500&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}`)
             const data = await response.json();
             setData(_.orderBy(data, isSortField, isSort));
         }
-
         fetchMyAPI()
             .then(() => {
                 setLoading(false);
@@ -35,6 +39,7 @@ function App() {
 
     return (
         <div className="min-vh-100 d-flex justify-content-center align-items-center">
+            <Modal person={isRow} />
             {isLoading
                 ? <Loader/>
                 : <Table
@@ -42,6 +47,7 @@ function App() {
                     onSort={sortTableFields}
                     sort={isSort}
                     sortField={isSortField}
+                    onRowSelect={rowSelect}
                 />
             }
         </div>
