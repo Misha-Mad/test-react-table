@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import {useEffect, useState} from 'react'
+import ReactPaginate from 'react-paginate';
+import {useEffect, useState} from 'react';
 import Loader from "./Loader/Loader";
 import Table from "./Table/Table";
 import Modal from "./Modal/Modal";
@@ -24,31 +25,56 @@ function App() {
         setIsRow(row);
     }
 
+    function pageChangeHandler(page) {
+        console.log(page);
+    }
+
     useEffect(() => {
         async function fetchMyAPI() {
             const response = await fetch(` http://www.filltext.com/?rows=500&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}`)
             const data = await response.json();
             setData(_.orderBy(data, isSortField, isSort));
         }
+
         fetchMyAPI()
             .then(() => {
                 setLoading(false);
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    }, [])
 
     return (
-        <div className="min-vh-100 d-flex justify-content-center align-items-center">
-            <Modal person={isRow} />
+        <div className="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
+            <Modal person={isRow}/>
             {isLoading
                 ? <Loader/>
-                : <Table
-                    data={isData}
-                    onSort={sortTableFields}
-                    sort={isSort}
-                    sortField={isSortField}
-                    onRowSelect={rowSelect}
-                />
+                : <>
+                    <Table
+                        data={isData}
+                        onSort={sortTableFields}
+                        sort={isSort}
+                        sortField={isSortField}
+                        onRowSelect={rowSelect}
+                    />
+                    <ReactPaginate
+                        previousLabel={'<'}
+                        nextLabel={'>'}
+                        breakLabel={'...'}
+                        breakClassName={'break-me'}
+                        pageCount={20}
+                        marginPagesDisplayed={2}
+                        pageRangeDisplayed={5}
+                        onPageChange={pageChangeHandler}
+                        containerClassName={'pagination'}
+                        activeClassName={'active'}
+                        pageClassName="page-item"
+                        pageLinkClassName="page-link"
+                        previousClassName="page-item"
+                        nextClassName="page-item"
+                        previousLinkClassName="page-link"
+                        nextLinkClassName="page-link"
+                    />
+                </>
             }
         </div>
     );
