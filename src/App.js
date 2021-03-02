@@ -12,12 +12,15 @@ function App() {
     const [isSort, setSort] = useState('asc');
     const [isSortField, setSortField] = useState('id');
     const [isRow, setIsRow] = useState({});
+    const [isDisplayData, setDisplayData] = useState([]);
+    const [isPageCount, setPageCount] = useState(0);
+    const pageSize = 50;
 
     function sortTableFields(sortField) {
-        const sortType = isSort === 'asc' ? 'desc' : 'asc';
-        const orderedData = _.orderBy(isData, sortField, sortType);
-        setData(orderedData);
-        setSort(sortType);
+        const sort = isSort === 'asc' ? 'desc' : 'asc';
+        const data = _.orderBy(isDisplayData, sortField, sort);
+        setDisplayData(data);
+        setSort(sort);
         setSortField(sortField);
     }
 
@@ -25,19 +28,27 @@ function App() {
         setIsRow(row);
     }
 
-    function pageChangeHandler(page) {
-        console.log(page);
+    function pageChangeHandler({selected}) {
+        setDisplayData(_.chunk(isData, pageSize)[selected]);
     }
 
     useEffect(() => {
         async function fetchMyAPI() {
-            const response = await fetch(` http://www.filltext.com/?rows=500&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}`)
-            const data = await response.json();
-            setData(_.orderBy(data, isSortField, isSort));
+            const response = await fetch(` http://www.filltext.com/?rows=500&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={streetAddress}&description={lorem|32}`)
+            return await response.json();
         }
 
         fetchMyAPI()
-            .then(() => {
+            .then((data) => {
+                const filteredData = _.orderBy(data, isSortField, isSort);
+                const displayedData = _.chunk(filteredData, pageSize)[0];
+                const pageCount = filteredData.length/ pageSize;
+                setData(filteredData);
+                setDisplayData(displayedData);
+                setPageCount(pageCount);
+            })
+            .then(()=>{
+
                 setLoading(false);
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,7 +61,7 @@ function App() {
                 ? <Loader/>
                 : <>
                     <Table
-                        data={isData}
+                        data={isDisplayData}
                         onSort={sortTableFields}
                         sort={isSort}
                         sortField={isSortField}
@@ -61,8 +72,8 @@ function App() {
                         nextLabel={'>'}
                         breakLabel={'...'}
                         breakClassName={'break-me'}
-                        pageCount={20}
-                        marginPagesDisplayed={2}
+                        pageCount={isPageCount}
+                        marginPagesDisplayed={5}
                         pageRangeDisplayed={5}
                         onPageChange={pageChangeHandler}
                         containerClassName={'pagination'}

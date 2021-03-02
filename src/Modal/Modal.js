@@ -13,9 +13,7 @@ function Modal({person}) {
                     <div className="modal-body">
                         <div><span className='font-weight-bold'>E-mail: </span>{person.email}</div>
                         <div><span className='font-weight-bold'>Phone: </span>{person.phone}</div>
-{/*
-                        <div><span className='font-weight-bold'>Address: </span>{(person.address.zip || '') + ', ' + person.address.state + ', ' + person.address.city + ', ' + person.address.streetAddress}</div>
-*/}
+                        <div><span className='font-weight-bold'>Address: </span>{person.address}</div>
                         <div><span className='font-weight-bold'>Description: </span>{person.description}</div>
                         <div className="modal-footer justify-content-center">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
